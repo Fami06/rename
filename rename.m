@@ -1,17 +1,38 @@
-%フォルダ内の全てのファイルの拡張子を変更する(DICOM)
-folderName = 'DWI＿b0';
+filepath = uigetdir();
+cd(filepath);
 
-% フォルダ内の全てのファイルを取得
-fileList = dir(fullfile(folderName, '0*'));
-numFiles = numel(fileList);
+ls;
 
-% 各ファイルの拡張子を'.dcm'に変更する
-for i = 1:numFiles
-    [~,name,ext] = fileparts(fileList(i).name);
+dlist = dir;
 
-    if ~strcmpi(ext, '.dcm')
-        newFileName = fullfile(folderName, [name '.dcm']);
-        movefile(fullfile(folderName, fileList(i).name), newFileName);
+for i = 3:length(dlist)
+    oldfilename = dlist(i).name;
+    oldfilepath = fullfile(filepath,oldfilename);
+
+    if size(oldfilename,2) == 8
+
+       num = oldfilename(4);
+       newStr = pad(num,3,'left','0');
+       ext = '.dcm';
+       newfilename = strcat(newStr,ext);
+       newfilepath = fullfile(filepath,newfilename);
+
+       movefile(oldfilepath, newfilepath);
+
+    elseif size(oldfilename,2) == 9
+       num = oldfilename(4:5);
+       newStr = pad(num,3,'left','0');
+       ext = '.dcm';
+       newfilename = strcat(newStr,ext);
+       newfilepath = fullfile(filepath,newfilename);
+
+       movefile(oldfilepath, newfilepath);
+
+    else 
 
     end
+
 end
+
+ls;
+
